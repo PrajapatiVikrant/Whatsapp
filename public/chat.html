@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title> Try It Yourself </title>
+    <style>
+        .Area {
+            overflow-y: auto;
+            height: 620px;
+            width: 810px;
+            border: 0.5px solid bisque;
+            background-color: #fff;
+        }
+
+        #A {
+            overflow-y: auto;
+            height: 400px;
+            width: 700px;
+            background-color: #fff;
+        }
+
+        .i {
+            float: left;
+            clear: both;
+            border-radius: 10px;
+            background-color: green;
+            margin: 10px;
+        }
+
+        .o {
+            float: right;
+            clear: both;
+
+            background-color: grey;
+            padding-bottom: 10px;
+
+            margin: 10px;
+        }
+
+        h4 {
+            background-color: white;
+            margin-left: 0;
+            margin-top: 0;
+        }
+
+        p {
+            margin: 10px;
+
+            color: white;
+        }
+
+        #m {
+            width: 600px;
+            font-size: 20px;
+            padding-left: 10px;
+            margin: 10px;
+            height: 30px;
+        }
+
+        button {
+            width: 80px;
+            font-size: 20px;
+            height: 35px;
+
+        }
+
+        hr {
+            width: 700px;
+        }
+    </style>
+</head>
+
+<body>
+    <center>
+        <div class="Area">
+            <nav>
+                <img src="mylogo.jpg" height="130px" width="400px">
+            </nav>
+            <hr>
+            <div id="A">
+
+            </div>
+
+            <!-- <textarea id="m" rows="1" placeholder="Enter your message"></textarea>
+                <button onclick="Outgoing()">Send</button> -->
+            <input type="text" id="m" placeholder="Enter your the message.....">
+            <button onclick="Outgoing()">Send</button>
+        </div>
+
+    </center>
+
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+        let Name = prompt('Enter your name to join');
+        var A = document.getElementById("A");
+        let textarea = document.getElementById("m");
+
+        function Outgoing() {
+            let msg = {
+                user: Name,
+                message: textarea.value,
+            }
+            add(msg, "o");
+            socket.emit('message', msg);
+            textarea.value = ""
+        }
+
+        function add(msg, oi) {
+
+            let s = document.createElement("div");
+            // let textNode =document.createTextNode(textarea.value);
+            s.innerHTML = "<h4>" + msg.user + "</h4>" + "<p>" + msg.message + "</p>";
+            s.classList.add(oi)
+
+            A.appendChild(s);
+        }
+        socket.on('message', (msg) => {
+            add(msg, 'i');
+        })
+    </script>
+</body>
+
+</html>
